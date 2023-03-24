@@ -109,7 +109,6 @@ class GeneticAlgorithmBase(SkoBase, metaclass=ABCMeta):
         self.max_iter = max_iter or self.max_iter
         best = []
         for i in range(self.max_iter):
-            print("Iter {} begins...".format(i+1))
             self.X = self.chrom2x(self.Chrom)
             self.Y = self.x2y()
             self.ranking()
