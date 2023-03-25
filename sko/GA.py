@@ -6,7 +6,7 @@
 
 import numpy as np
 from .base import SkoBase
-from sko.tools import func_transformer
+from scikitopt.sko.tools import func_transformer
 from abc import ABCMeta, abstractmethod
 from .operators import crossover, mutation, ranking, selection
 
@@ -34,7 +34,7 @@ class GeneticAlgorithmBase(SkoBase, metaclass=ABCMeta):
         self.Y = None  # shape = (size_pop,) , value is f(x) + penalty for constraint
         self.FitV = None  # shape = (size_pop,)
 
-        # self.FitV_history = []
+        self.FitV_history = []
         self.generation_best_X = []
         self.generation_best_Y = []
 
@@ -48,7 +48,13 @@ class GeneticAlgorithmBase(SkoBase, metaclass=ABCMeta):
         pass
 
     def x2y(self):
-        self.Y_raw = self.func(self.X)
+        # local variable will be released after ending running
+        x = self.X
+        func = self.func
+        y_raw = func(x)
+        self.Y_raw = y_raw
+        del x, func, y_raw
+
         if not self.has_constraint:
             self.Y = self.Y_raw
         else:
@@ -121,7 +127,7 @@ class GeneticAlgorithmBase(SkoBase, metaclass=ABCMeta):
             self.generation_best_X.append(self.X[generation_best_index, :])
             self.generation_best_Y.append(self.Y[generation_best_index])
             self.all_history_Y.append(self.Y)
-            # self.all_history_FitV.append(self.FitV)
+            self.all_history_FitV.append(self.FitV)
 
             if self.early_stop:
                 best.append(min(self.generation_best_Y))

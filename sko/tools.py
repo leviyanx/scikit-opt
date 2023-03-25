@@ -101,10 +101,14 @@ def func_transformer(func):
         return func_transformed
     elif mode == 'multiprocessing':
         from multiprocessing import Pool
-        pool = Pool()
 
         def func_transformed(X):
-            return np.array(pool.map(func, X))
+            pool = Pool()
+            res = np.array(pool.map(func, X))
+
+            pool.close()
+            pool.join()
+            return res
 
         return func_transformed
 
