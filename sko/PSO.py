@@ -4,7 +4,7 @@
 # @Author  : github.com/guofei9987
 
 import numpy as np
-from sko.tools import func_transformer
+from scikitopt.sko.tools import func_transformer
 from .base import SkoBase
 from .operators import crossover, mutation, ranking, selection
 from .operators import mutation
